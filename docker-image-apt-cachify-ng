@@ -1,0 +1,15 @@
+#!/bin/bash
+## @author Copyright (C) 2016 Robin Schneider <ypid@riseup.net>
+## @license AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+
+orig_image="$1"
+
+if [ -z "$orig_image" ]; then
+    echo 'Please specify the Docker image which should be modified to use the apt proxy configured in the file `apt-cacher-ng`.' 1>&2
+fi
+
+echo "
+FROM $orig_image
+ADD apt-cacher-ng /etc/apt/apt.conf.d/000apt-cacher-ng-proxy
+" > Dockerfile
+docker build --tag "$orig_image" .
